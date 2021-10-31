@@ -1,20 +1,36 @@
-use lambda::handler_fn;
+use lambda_http::{Request, handler as create_handler, lambda_runtime::{run, Context, Error}, Body, Response, IntoResponse};
+use serde_json::{from_str, to_string};
+use serde::{Deserialize, Serialize};
+use http::{StatusCode};
 
 #[tokio::main]
-async fn main() -> Result<(), LambdaError> {
-    println!("execute bootstrap#main");
-    let runtime_handler = handler_fn(handler);
-    lambda::run(runtime_handler).await?;
+async fn main() -> Result<(), Error> {
+    run(create_handler(handler)).await?;
     Ok(())
 }
 
-use lambda::Context;
-use serde_json::{json, Value};
 
-pub type LambdaError = Box<dyn std::error::Error + Send + Sync + 'static>;
+#[derive(Deserialize)]
+struct RequestBody {
+    name: String,
+}
 
-pub async fn handler(event: Value, _: Context) -> Result<Value, LambdaError> {
-    println!("execute lib#handler");
-    let name = event["name"].as_str().unwrap_or("world");
-    Ok(json!({ "message": format!("Hello, {}!", name) }))
+#[derive(Serialize)]
+struct ResponseBody {
+    name: String,
+}
+
+pub async fn handler(event: Request, _: Context) -> Result<impl IntoResponse, Error> {
+    let body = match event.body() {
+        Body::Text(body) => body,
+        _ => { return Err(Error::from("")); },
+    };
+    let body: RequestBody = from_str(body)?;
+    let response = ResponseBody {
+        name: body.name,
+    };
+    let response = Response::builder()
+        .status(StatusCode::OK)
+        .body(to_string(&response)?)?;
+    Ok(response)
 }
