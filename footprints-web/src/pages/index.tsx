@@ -1,19 +1,23 @@
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-
-Auth.configure({
-  region: process.env['NEXT_PUBLIC_COGNITO_REGION'],
-  userPoolId: process.env['NEXT_PUBLIC_COGNITO_USER_POOL_ID'],
-  userPoolWebClientId: process.env['NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID'],
-  oauth: {
-    domain: process.env['NEXT_PUBLIC_COGNITO_OAUTH_DOMAIN'],
-    redirectSignIn: process.env['NEXT_PUBLIC_COGNITO_OAUTH_REDIRECT_URL'],
-    scope: ['openid'],
-    responseType: 'token',
-  },
-});
+import { useEffect } from 'react';
 
 const Index = (): JSX.Element => {
+  useEffect(() => {
+    Auth.configure({
+      region: process.env['NEXT_PUBLIC_COGNITO_REGION'],
+      userPoolId: process.env['NEXT_PUBLIC_COGNITO_USER_POOL_ID'],
+      userPoolWebClientId: process.env['NEXT_PUBLIC_COGNITO_USER_POOL_CLIENT_ID'],
+      oauth: {
+        domain: process.env['NEXT_PUBLIC_COGNITO_OAUTH_DOMAIN'],
+        redirectSignIn: process.env['NEXT_PUBLIC_COGNITO_OAUTH_REDIRECT_URL'],
+        scope: ['openid'],
+        responseType: 'token',
+      },
+      storage: sessionStorage,
+    });
+  }, []);
+
   const signIn = () => {
     Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
   };
