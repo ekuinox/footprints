@@ -2,6 +2,8 @@ import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
 import { useEffect } from 'react';
 
+const requestUrl = process.env['NEXT_PUBLIC_API_HOST'] ?? '';
+
 const Index = (): JSX.Element => {
   useEffect(() => {
     Auth.configure({
@@ -26,10 +28,20 @@ const Index = (): JSX.Element => {
     Auth.currentSession().then(console.log);
   };
 
+  const request = () => {
+    Auth.currentSession().then((session) => {
+      const token = session.getIdToken().getJwtToken();
+      return fetch(requestUrl, { headers: { Authorization: token } })
+        .then((response) => response.status === 200);
+    })
+      .then(console.log);
+  };
+
   return (
     <div>
       <button onClick={signIn}>signIn</button>
       <button onClick={getUser}>getUser</button>
+      <button onClick={request}>request</button>
     </div>
   );
 };
