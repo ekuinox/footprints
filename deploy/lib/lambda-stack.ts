@@ -11,7 +11,7 @@ export class LambdaStack extends core.Stack {
   constructor(scope: cdk.App, id: string, props: Props) {
     super(scope, id);
 
-    const bootstrapLocation = `${__dirname}/../../sample-lambda-func/target/cdk/release/sample-lambda-func.zip`;
+    const bootstrapLocation = `${__dirname}/../../sample-lambda-func/target/cdk/release/bootstrap.zip`;
 
     const entryId = "main";
     const entryFnName = `${id}-${entryId}`;

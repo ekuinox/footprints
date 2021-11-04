@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "ts-node ./scripts/build.ts",
-    "build:clean": "ts-node ./scripts/clean.ts",
+    "build": "./build.sh",
+    "build:clean": "./clean.sh",
     "deploy": "npm run build:clean && npm run build && npm run cdk:deploy",
-    "cdk:deploy": "ts-node ./scripts/deploy.ts",
+    "cdk:deploy": "./deploy.sh",
     "cdk:bootstrap": "cdk bootstrap aws://$(aws sts get-caller-identity | jq -r .Account)/$AWS_REGION",
     "cdklocal:start": "docker-compose up",
     "cdklocal:clear-cache": "(rm ~/.cdk/cache/accounts.json || true) && (rm ~/.cdk/cache/accounts_partitions.json || true)",
@@ -25,17 +25,16 @@
   },
   "homepage": "https://github.com/ekuinox/footprints#readme",
   "devDependencies": {
-    "@aws-cdk/aws-cognito": "^1.130.0",
-    "@aws-cdk/aws-iam": "^1.130.0",
     "@aws-cdk/aws-lambda": "^1.130.0",
     "@aws-cdk/aws-s3": "^1.130.0",
     "@aws-cdk/core": "^1.130.0",
     "@types/node": "^16.11.6",
     "aws-cdk": "^1.130.0",
     "aws-cdk-local": "^1.65.8",
-    "dotenv": "^10.0.0",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.11.0",
-    "typescript": "^4.4.4"
+    "typescript": "^4.4.4",
+    "@aws-cdk/aws-cognito": "^1.130.0",
+    "@aws-cdk/aws-iam": "^1.130.0"
   }
 }
