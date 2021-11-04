@@ -11,8 +11,8 @@ export default class Stack {
   public lambdaStack: LambdaStack;
 
   constructor(app: cdk.App) {
-    this.lambdaStack = new LambdaStack(app, `${STACK_NAME}`, {});
-    this.cognitoStack = new CognitoStack(app, `${STACK_NAME}`, {});
+    this.lambdaStack = new LambdaStack(app, `${STACK_NAME}-lambda`, {});
+    this.cognitoStack = new CognitoStack(app, `${STACK_NAME}-cognito`, {});
   }
 }
 
