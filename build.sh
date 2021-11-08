@@ -1,5 +1,6 @@
 #!/bin/bash
 
+FUNCTION_NAMES_FILE="./lambda_functions"
 CROSS_COMPILER="x86_64-unknown-linux-musl-gcc"
 TARGET="x86_64-unknown-linux-musl"
 BUILD_MODE="--release" # or ""
@@ -34,4 +35,4 @@ while read name; do
     fi
     echo ${name}
     build ${name}
-done < "./function_names.txt"
+done < ${FUNCTION_NAMES_FILE}
