@@ -1,38 +1,38 @@
 #!/bin/bash
 
-FUNCTION_NAMES_FILE="./lambda_functions"
-CROSS_COMPILER="x86_64-unknown-linux-musl-gcc"
-TARGET="x86_64-unknown-linux-musl"
-BUILD_MODE="--release" # or ""
-HAS_CROSS_COMPILER=`which ${CROSS_COMPILER}`
-HAS_CROSS_COMMAND=`which cross`
-BUILD_COMMAND=""
+LAMBDA_FUNCTION_NAMES_FILE="./lambda_functions"
+LAMBDA_CROSS_COMPILER="x86_64-unknown-linux-musl-gcc"
+LAMBDA_TARGET="x86_64-unknown-linux-musl"
+LAMBDA_BUILD_MODE="--release" # or ""
+HAS_LAMBDA_CROSS_COMPILER=`which ${LAMBDA_CROSS_COMPILER}`
+HAS_LAMBDA_CROSS_COMMAND=`which cross`
+LAMBDA_BUILD_COMMAND=""
 
-function build() {
+function build_lambda() {
     target=$1
     prev_directory=`pwd`
 
     echo "target=${target}"
     cd ${target}
-    ${BUILD_COMMAND} && \
+    ${LAMBDA_BUILD_COMMAND} && \
         mkdir -p ./target/cdk/release && \
         zip -j ./target/cdk/release/bootstrap.zip ./target/x86_64-unknown-linux-musl/release/${target}
     cd ${prev_directory}
 }
 
-if [ ${HAS_CROSS_COMPILER} ]; then
-    BUILD_COMMAND="cargo build ${BUILD_MODE} --target ${TARGET}"
-elif [ ${HAS_CROSS_COMMAND} ]; then
-    BUILD_COMMAND="cross build ${BUILD_MODE} --target ${TARGET}"
+if [ ${HAS_LAMBDA_CROSS_COMPILER} ]; then
+    LAMBDA_BUILD_COMMAND="cargo build ${LAMBDA_BUILD_MODE} --target ${LAMBDA_TARGET}"
+elif [ ${HAS_LAMBDA_CROSS_COMMAND} ]; then
+    LAMBDA_BUILD_COMMAND="cross build ${LAMBDA_BUILD_MODE} --target ${LAMBDA_TARGET}"
 else
     echo "Any compiler are not found."
     exit 1
 fi
 
-echo "BUILD_COMMAND=\"${BUILD_COMMAND}\""
+echo "LAMBDA_BUILD_COMMAND=\"${LAMBDA_BUILD_COMMAND}\""
 
 while read name; do
     test -e ${name} && \
-        build ${name} || \
+        build_lambda ${name} || \
         echo "target=${name} not found."
-done < ${FUNCTION_NAMES_FILE}
+done < ${LAMBDA_FUNCTION_NAMES_FILE}
