@@ -8,15 +8,27 @@ HAS_LAMBDA_CROSS_COMPILER=`which ${LAMBDA_CROSS_COMPILER}`
 HAS_LAMBDA_CROSS_COMMAND=`which cross`
 LAMBDA_BUILD_COMMAND=""
 
+FRONTEND_BUILD_COMMAND="npm ci && npm run build"
+FRONTEND_DIRECTORY="footprints-web"
+
 function build_lambda() {
     target=$1
     prev_directory=`pwd`
 
-    echo "target=${target}"
+    echo "target=\"${target}\""
     cd ${target}
     ${LAMBDA_BUILD_COMMAND} && \
         mkdir -p ./target/cdk/release && \
         zip -j ./target/cdk/release/bootstrap.zip ./target/x86_64-unknown-linux-musl/release/${target}
+    cd ${prev_directory}
+}
+
+function build_frontend() {
+    target=$1
+    prev_directory=`pwd`
+
+    echo "target=\"${target}\""
+    ${FRONTEND_BUILD_COMMAND}
     cd ${prev_directory}
 }
 
@@ -36,3 +48,6 @@ while read name; do
         build_lambda ${name} || \
         echo "target=${name} not found."
 done < ${LAMBDA_FUNCTION_NAMES_FILE}
+
+# todo .env
+build_frontend ${FRONTEND_DIRECTORY}
