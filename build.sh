@@ -12,6 +12,7 @@ function build() {
     target=$1
     prev_directory=`pwd`
 
+    echo "target=${target}"
     cd ${target}
     ${BUILD_COMMAND} && \
         mkdir -p ./target/cdk/release && \
@@ -28,11 +29,10 @@ else
     exit 1
 fi
 
+echo "BUILD_COMMAND=\"${BUILD_COMMAND}\""
+
 while read name; do
-    existed=`ls ./${name}; echo $?`
-    if [ !$existed ]; then
-        continue
-    fi
-    echo ${name}
-    build ${name}
+    test -e ${name} && \
+        build ${name} || \
+        echo "target=${name} not found."
 done < ${FUNCTION_NAMES_FILE}
