@@ -1,15 +1,15 @@
 import * as cdk from "@aws-cdk/core";
 import * as pkg from "../package.json";
-import { Footprints } from "./lib/footprints";
+import { MainStack } from "./lib/main";
 
 const { BENCHMARK_SUFFIX } = process.env;
 const STACK_NAME = BENCHMARK_SUFFIX ? `${pkg.name}-${BENCHMARK_SUFFIX}` : pkg.name;
 
 export default class Stack {
-  public footprints: Footprints;
+  public mainStack: MainStack;
 
   constructor(app: cdk.App) {
-    this.footprints = new Footprints(app, `${STACK_NAME}-footprints`, {});
+    this.mainStack = new MainStack(app, `${STACK_NAME}-main`, {});
   }
 }
 

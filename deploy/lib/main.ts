@@ -22,7 +22,7 @@ interface Props {
   // ...
 };
 
-export class Footprints extends Stack {
+export class MainStack extends Stack {
   constructor(scope: App, id: string, props: Props) {
     super(scope, id);
 
