@@ -8,6 +8,7 @@
     "build:clean": "./scripts/clean.sh",
     "deploy": "npm run build:clean && npm run build && npm run cdk:deploy",
     "cdk:deploy": "./scripts/deploy.sh",
+    "cdk:destroy": "./scripts/destroy.sh",
     "cdk:bootstrap": "cdk bootstrap aws://$(aws sts get-caller-identity | jq -r .Account)/$AWS_REGION",
     "cdklocal:start": "docker-compose up",
     "cdklocal:clear-cache": "(rm ~/.cdk/cache/accounts.json || true) && (rm ~/.cdk/cache/accounts_partitions.json || true)",
