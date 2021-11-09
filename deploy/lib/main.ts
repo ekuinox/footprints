@@ -13,9 +13,6 @@ const functionNames = [
   'sample-lambda-func',
 ];
 
-const googleClientId = process.env['COGNITO_PROVIDER_GOOGLE_CLIENT_ID'] ?? '';
-const googleClientSecret = process.env['COGNITO_PROVIDER_GOOGLE_CLIENT_SECRET'] ?? '';
-
 export class MainStack extends Stack {
   constructor(scope: App, id: string, props: Props) {
     super(scope, id);
