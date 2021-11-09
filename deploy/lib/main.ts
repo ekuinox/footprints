@@ -1,6 +1,7 @@
 import { Stack, App } from "@aws-cdk/core";
 import { createFunction } from "./lambda";
 import { createAuthentications } from "./authentication";
+import { createFrontend } from "./frontend";
 
 const { CDK_LOCAL } = process.env;
 
@@ -21,5 +22,6 @@ export class MainStack extends Stack {
       (name) => createFunction(this, name, isLocal)
     );
     createAuthentications(this);
+    createFrontend(this, props.projectRootDirectory);
   }
 };
