@@ -5,7 +5,7 @@ import { createAuthentications } from "./authentication";
 const { CDK_LOCAL } = process.env;
 
 interface Props {
-  // ...
+  projectRootDirectory: string;
 };
 
 const functionNames = [
