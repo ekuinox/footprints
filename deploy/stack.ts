@@ -1,18 +1,15 @@
 import * as cdk from "@aws-cdk/core";
-import { LambdaStack } from "./lib/lambda-stack";
 import * as pkg from "../package.json";
-import { CognitoStack } from "./lib/cognito";
+import { Footprints } from "./lib/footprints";
 
 const { BENCHMARK_SUFFIX } = process.env;
 const STACK_NAME = BENCHMARK_SUFFIX ? `${pkg.name}-${BENCHMARK_SUFFIX}` : pkg.name;
 
 export default class Stack {
-  public cognitoStack: CognitoStack;
-  public lambdaStack: LambdaStack;
+  public footprints: Footprints;
 
   constructor(app: cdk.App) {
-    this.lambdaStack = new LambdaStack(app, `${STACK_NAME}-lambda`, {});
-    this.cognitoStack = new CognitoStack(app, `${STACK_NAME}-cognito`, {});
+    this.footprints = new Footprints(app, `${STACK_NAME}-footprints`, {});
   }
 }
 
