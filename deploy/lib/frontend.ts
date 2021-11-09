@@ -2,15 +2,20 @@ import path from 'path';
 import { Stack } from '@aws-cdk/core';
 import { Bucket } from '@aws-cdk/aws-s3';
 import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment';
-import { CloudFrontWebDistribution, OriginAccessIdentity, PriceClass } from '@aws-cdk/aws-cloudfront';
+import { CloudFrontWebDistribution, OriginAccessIdentity, PriceClass, ViewerProtocolPolicy } from '@aws-cdk/aws-cloudfront';
 import { Effect, PolicyStatement } from '@aws-cdk/aws-iam';
 
 const frontendCodeDirectory = 'footprints-web/.next/server/pages';
 
+export type FrontendResources = readonly [
+  bucket: Bucket,
+  distribution: CloudFrontWebDistribution,
+];
+
 export const createFrontend = (
   stack: Stack,
   projectRootDirectory: string
-) => {
+): FrontendResources => {
   const target = path.join(projectRootDirectory, frontendCodeDirectory);
 
   const bucket = new Bucket(stack, 'Bucket');
@@ -57,6 +62,7 @@ export const createFrontend = (
         behaviors: [
           {
             isDefaultBehavior: true,
+            viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           },
         ],
       },
@@ -74,4 +80,6 @@ export const createFrontend = (
       '/*',
     ],
   });
+
+  return [bucket, distribution] as const;
 };
