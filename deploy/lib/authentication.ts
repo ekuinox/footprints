@@ -61,4 +61,5 @@ export const createAuthentications = (
       UserPoolClientIdentityProvider.GOOGLE,
     ],
   });
+  userPoolClient.node.addDependency(googleIdentityProvider);
 };
