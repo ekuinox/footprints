@@ -34,7 +34,7 @@
     "@aws-cdk/aws-s3-deployment": "^1.131.0",
     "@aws-cdk/core": "^1.131.0",
     "@types/node": "^16.11.6",
-    "aws-cdk": "^1.130.0",
+    "aws-cdk": "^1.131.0",
     "aws-cdk-local": "^1.65.8",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.11.0",
