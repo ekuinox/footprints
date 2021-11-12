@@ -8,7 +8,8 @@ HAS_LAMBDA_CROSS_COMPILER=`which ${LAMBDA_CROSS_COMPILER}`
 HAS_LAMBDA_CROSS_COMMAND=`which cross`
 LAMBDA_BUILD_COMMAND=""
 
-FRONTEND_BUILD_COMMAND="npm ci && npm run build"
+FRONTEND_SETUP_COMMAND="npm i"
+FRONTEND_BUILD_COMMAND="npm run build"
 FRONTEND_DIRECTORY="footprints-web"
 
 function build_lambda() {
@@ -28,6 +29,8 @@ function build_frontend() {
     prev_directory=`pwd`
 
     echo "target=\"${target}\""
+    cd ${target}
+    ${FRONTEND_SETUP_COMMAND}
     ${FRONTEND_BUILD_COMMAND}
     cd ${prev_directory}
 }
