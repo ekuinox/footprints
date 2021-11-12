@@ -12,7 +12,7 @@ interface Props {
 };
 
 const handlers: ReadonlyArray<readonly [name: string, path: string, method: HttpMethod]> = [
-  ['sample-lambda-func', 'status', 'get'],
+  ['sample-lambda-func', '/status', 'get'],
 ];
 
 export class MainStack extends Stack {
