@@ -6,7 +6,7 @@ export const createFunction = (
   stack: Stack,
   name: string,
   isLocal: boolean,
-) => {
+): [Function] => {
   const bootstrapLocation = `${__dirname}/../../${name}/target/cdk/release/bootstrap.zip`;
 
   const entryId = "main";
@@ -28,4 +28,6 @@ export const createFunction = (
 
   Aspects.of(entry).add(new Tag("service-type", "API"));
   Aspects.of(entry).add(new Tag("billing", `lambda-${entryFnName}`));
+
+  return [entry];
 };

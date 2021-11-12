@@ -1,0 +1,28 @@
+openapi: "3.0.0"
+info:
+  title: "Footprints API"
+  version: "0.0.1"
+paths:
+  /status:
+    get:
+      summary: "Returning information status"
+      responses:
+        200:
+          "$ref": "#/components/responses/GetStatusOkResponse"
+components:
+  schemas:
+    status:
+      type: "object"
+      required:
+        - version
+      properties:
+        version:
+          type: "string"
+          description: "Footprints version"
+  responses:
+    GetStatusOkResponse:
+      description: "Get status successfully response"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/status"
