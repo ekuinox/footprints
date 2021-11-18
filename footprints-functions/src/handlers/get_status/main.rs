@@ -1,7 +1,11 @@
-use lambda_http::{Request, handler as create_handler, lambda_runtime::{run, Context, Error}, Body, Response, IntoResponse};
-use serde_json::{from_str, to_string};
-use serde::{Deserialize, Serialize};
-use http::{StatusCode};
+use http::StatusCode;
+use lambda_http::{
+    handler as create_handler,
+    lambda_runtime::{run, Context, Error},
+    IntoResponse, Request, Response,
+};
+use serde::Serialize;
+use serde_json::to_string;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -9,25 +13,15 @@ async fn main() -> Result<(), Error> {
     Ok(())
 }
 
-
-#[derive(Deserialize)]
-struct RequestBody {
-    name: String,
-}
-
 #[derive(Serialize)]
 struct ResponseBody {
-    name: String,
+    version: String,
 }
 
-pub async fn handler(event: Request, _: Context) -> Result<impl IntoResponse, Error> {
-    let body = match event.body() {
-        Body::Text(body) => body,
-        _ => { return Err(Error::from("")); },
-    };
-    let body: RequestBody = from_str(body)?;
+/// GET /status handler
+pub async fn handler(_event: Request, _: Context) -> Result<impl IntoResponse, Error> {
     let response = ResponseBody {
-        name: body.name,
+        version: "0.0.1".into(),
     };
     let response = Response::builder()
         .status(StatusCode::OK)
