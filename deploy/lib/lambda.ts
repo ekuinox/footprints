@@ -1,15 +1,19 @@
+import path from "path";
 import { Bucket } from "@aws-cdk/aws-s3";
 import { Aspects, Duration, Stack, Tag } from "@aws-cdk/core";
 import { Code, Function, Runtime, Tracing } from "@aws-cdk/aws-lambda";
 
+const lambdaPackageDirectoryName = 'footprints-functions';
+
 export const createFunction = (
   stack: Stack,
   name: string,
+  projectRootDirectory: string,
   isLocal: boolean,
 ): [Function] => {
-  const bootstrapLocation = `${__dirname}/../../${name}/target/cdk/release/bootstrap.zip`;
+  const bootstrapLocation = path.join(projectRootDirectory, lambdaPackageDirectoryName, `/target/cdk/release/${name}.zip`);
 
-  const entryId = "main";
+  const entryId = name;
   const entryFnName = `${stack.stackName}-${entryId}`;
   const entry = new Function(stack, entryId, {
     functionName: entryFnName,

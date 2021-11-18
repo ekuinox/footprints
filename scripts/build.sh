@@ -1,12 +1,13 @@
 #!/bin/bash
 
-LAMBDA_FUNCTION_NAMES_FILE="./lambda_functions"
 LAMBDA_CROSS_COMPILER="x86_64-unknown-linux-musl-gcc"
 LAMBDA_TARGET="x86_64-unknown-linux-musl"
 LAMBDA_BUILD_MODE="--release" # or ""
 HAS_LAMBDA_CROSS_COMPILER=`which ${LAMBDA_CROSS_COMPILER}`
 HAS_LAMBDA_CROSS_COMMAND=`which cross`
 LAMBDA_BUILD_COMMAND=""
+LAMBDA_DIRECTORY="footprints-functions"
+LAMBDA_GET_FUNCTION_NAMES="./get_functions.sh"
 
 FRONTEND_SETUP_COMMAND="npm i"
 FRONTEND_BUILD_COMMAND="npm run build"
@@ -18,9 +19,12 @@ function build_lambda() {
 
     echo "target=\"${target}\""
     cd ${target}
-    ${LAMBDA_BUILD_COMMAND} && \
-        mkdir -p ./target/cdk/release && \
-        zip -j ./target/cdk/release/bootstrap.zip ./target/x86_64-unknown-linux-musl/release/${target}
+    ${LAMBDA_BUILD_COMMAND}
+    mkdir -p ./target/cdk/release
+    ${LAMBDA_GET_FUNCTION_NAMES} | while read name; do
+        echo ${name}
+        zip -j ./target/cdk/release/${name}.zip ./target/x86_64-unknown-linux-musl/release/${name}
+    done
     cd ${prev_directory}
 }
 
@@ -46,11 +50,7 @@ fi
 
 echo "LAMBDA_BUILD_COMMAND=\"${LAMBDA_BUILD_COMMAND}\""
 
-while read name; do
-    test -e ${name} && \
-        build_lambda ${name} || \
-        echo "target=${name} not found."
-done < ${LAMBDA_FUNCTION_NAMES_FILE}
+build_lambda ${LAMBDA_DIRECTORY}
 
 # todo .env
 build_frontend ${FRONTEND_DIRECTORY}

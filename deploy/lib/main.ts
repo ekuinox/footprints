@@ -12,18 +12,25 @@ interface Props {
 };
 
 const handlers: ReadonlyArray<readonly [name: string, path: string, method: HttpMethod]> = [
-  ['sample-lambda-func', '/status', 'get'],
+  ['get_status', '/status', 'get'],
 ];
 
 export class MainStack extends Stack {
-  constructor(scope: App, id: string, props: Props) {
+  constructor(
+    scope: App,
+    id: string,
+    {
+      projectRootDirectory,
+      schema,
+    }: Props
+  ) {
     super(scope, id);
 
     const isLocal = CDK_LOCAL === 'true';
-    const handlers_ = handlers.map(([name, ...rest]) => [name, ...rest, ...createFunction(this, name, isLocal)] as const);
-    const api = createApi(this, props.schema, handlers_);
+    const handlers_ = handlers.map(([name, ...rest]) => [name, ...rest, ...createFunction(this, name, projectRootDirectory, isLocal)] as const);
+    const api = createApi(this, schema, handlers_);
     
-    const [_bucket, cloudfrontDistribution] = createFrontend(this, props.projectRootDirectory);
+    const [_bucket, cloudfrontDistribution] = createFrontend(this, projectRootDirectory);
     const { callbackUrl: _, ...defaultAuthenticationProps_ } = defaultAuthenticationProps;
     createAuthentications(this, {
       callbackUrl: `https://${cloudfrontDistribution.distributionDomainName}`,

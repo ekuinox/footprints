@@ -1,5 +1,5 @@
 [package]
-name = "sample-lambda-func"
+name = "footprints_functions"
 version = "0.1.0"
 edition = "2021"
 
@@ -14,3 +14,7 @@ http = "*"
 
 [dev-dependencies]
 pretty_assertions = "0.7.2"
+
+[[bin]]
+name = "get_status"
+path = "src/handlers/get_status/main.rs"
