@@ -23,7 +23,8 @@ function build_lambda() {
     mkdir -p ./target/cdk/release
     ${LAMBDA_GET_FUNCTION_NAMES} | while read name; do
         echo ${name}
-        zip -j ./target/cdk/release/${name}.zip ./target/x86_64-unknown-linux-musl/release/${name}
+        mkdir -p ./target/cdk/release/${name}
+        cp ./target/x86_64-unknown-linux-musl/release/${name} ./target/cdk/release/${name}/bootstrap
     done
     cd ${prev_directory}
 }
@@ -48,9 +49,12 @@ else
     exit 1
 fi
 
-echo "LAMBDA_BUILD_COMMAND=\"${LAMBDA_BUILD_COMMAND}\""
+if [ -z ${SKIP_LAMBDA_BUILD} ]; then
+    echo "LAMBDA_BUILD_COMMAND=\"${LAMBDA_BUILD_COMMAND}\""
+    build_lambda ${LAMBDA_DIRECTORY}
+fi
 
-build_lambda ${LAMBDA_DIRECTORY}
-
-# todo .env
-build_frontend ${FRONTEND_DIRECTORY}
+if [ -z ${SKIP_FRONTEND_BUILD} ]; then
+    # todo .env
+    build_frontend ${FRONTEND_DIRECTORY}
+fi

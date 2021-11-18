@@ -11,7 +11,7 @@ export const createFunction = (
   projectRootDirectory: string,
   isLocal: boolean,
 ): [Function] => {
-  const bootstrapLocation = path.join(projectRootDirectory, lambdaPackageDirectoryName, `/target/cdk/release/${name}.zip`);
+  const bootstrapLocation = path.join(projectRootDirectory, lambdaPackageDirectoryName, `/target/cdk/release/${name}`);
 
   const entryId = name;
   const entryFnName = `${stack.stackName}-${entryId}`;
